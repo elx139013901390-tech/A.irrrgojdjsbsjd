@@ -190,7 +190,38 @@ await db.query(
 res.json(rows);
 
 });
+app.get("/api/wallet/:id", async(req,res)=>{
 
+try{
+
+const id = req.params.id;
+
+const [rows] =
+await db.query(
+"SELECT balance FROM users WHERE id=?",
+[id]
+);
+
+if(!rows.length){
+
+return res.json({
+success:false
+});
+
+}
+
+res.json(rows[0]);
+
+}catch(err){
+
+res.status(500).json({
+success:false,
+error:err.message
+});
+
+}
+
+});
 /* =====================
 اجرای سرور
 ===================== */
