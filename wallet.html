@@ -2,16 +2,30 @@
 <meta charset="UTF-8">
 <title>کیف پول</title>
 <link rel="stylesheet" href="style.css">
-</head><body><div class="container"><div class="card"><h1>
-💰 کیف پول من
-</h1><h2 id="balance">
+</head><body><div class="container"><div class="card"><h1>💰 کیف پول من</h1><h2 id="balance">
 درحال بارگذاری...
-</h2></div></div><script>
+</h2></div><div class="card"><h2>🔄 انتقال امتیاز</h2><input
+type="text"
+id="receiver"
+placeholder="نام کاربری مقصد">
+
+<input
+type="number"
+id="amount"
+placeholder="مقدار انتقال">
+
+<br><br>
+
+<button
+class="btn"
+onclick="transfer()">
+
+انتقال امتیاز
+
+</button></div></div><script>
 
 const userId =
-localStorage.getItem(
-"userId"
-);
+localStorage.getItem("userId");
 
 async function loadWallet(){
 
@@ -27,6 +41,43 @@ document.getElementById(
 "balance"
 ).innerHTML =
 data.balance + " امتیاز";
+
+}
+
+async function transfer(){
+
+const receiver =
+document.getElementById(
+"receiver"
+).value;
+
+const amount =
+document.getElementById(
+"amount"
+).value;
+
+const res =
+await fetch(
+"/api/transfer",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+senderId:userId,
+receiverUsername:receiver,
+amount:Number(amount)
+})
+}
+);
+
+const data =
+await res.json();
+
+alert(data.message);
+
+loadWallet();
 
 }
 
