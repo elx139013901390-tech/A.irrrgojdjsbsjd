@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8">
+<title>رتبه بندی</title>
+<link rel="stylesheet" href="style.css">
+</head><body><div class="container"><div class="card"><h1>
+🏆 رتبه بندی کاربران
+</h1><table width="100%"><thead><tr>
+<th>رتبه</th>
+<th>نام کاربری</th>
+<th>کشور</th>
+<th>امتیاز</th>
+</tr></thead><tbody id="leaderboard"></tbody></table></div></div><script>
+
+async function loadLeaderboard(){
+
+const res =
+await fetch("/api/leaderboard");
+
+const users =
+await res.json();
+
+const table =
+document.getElementById(
+"leaderboard"
+);
+
+users.forEach((user,index)=>{
+
+table.innerHTML += `
+<tr>
+<td>${index+1}</td>
+<td>${user.username}</td>
+<td>${user.country}</td>
+<td>${user.points}</td>
+</tr>
+`;
+
+});
+
+}
+
+loadLeaderboard();
+
+</script></body>
+</html>
