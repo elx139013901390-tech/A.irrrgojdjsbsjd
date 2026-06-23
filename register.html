@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8">
+<title>ثبت نام</title>
+<link rel="stylesheet" href="style.css">
+</head><body><div class="container"><div class="card"><h1>📝 ثبت نام</h1><input
+type="text"
+id="username"
+placeholder="نام کاربری">
+
+<input
+type="password"
+id="password"
+placeholder="رمز عبور">
+
+<input
+type="text"
+id="country"
+placeholder="کشور">
+
+<input
+type="text"
+id="favorite_team"
+placeholder="تیم مورد علاقه">
+
+<br><br>
+
+<button
+class="btn"
+onclick="registerUser()">
+
+ثبت نام
+
+</button></div></div><script>
+
+async function registerUser(){
+
+const username =
+document.getElementById("username").value;
+
+const password =
+document.getElementById("password").value;
+
+const country =
+document.getElementById("country").value;
+
+const favorite_team =
+document.getElementById("favorite_team").value;
+
+const res =
+await fetch("/api/register",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+username,
+password,
+country,
+favorite_team
+})
+});
+
+const data =
+await res.json();
+
+if(data.success){
+
+alert("ثبت نام موفق");
+
+location.href="login.html";
+
+}else{
+
+alert(data.message);
+
+}
+
+}
+
+</script></body>
+</html>
