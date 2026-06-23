@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const db = require("./db");
 
 dotenv.config();
 
@@ -13,9 +12,9 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static("public"));
 
-/* =====================
-ثبت نام
-===================== */
+const db = require("./db");
+
+/* REGISTER */
 
 app.post("/api/register", async (req,res)=>{
 
@@ -72,9 +71,7 @@ error:err.message
 
 });
 
-/* =====================
-ورود
-===================== */
+/* LOGIN */
 
 app.post("/api/login", async(req,res)=>{
 
@@ -102,15 +99,6 @@ message:"کاربر یافت نشد"
 
 const user = users[0];
 
-if(user.banned){
-
-return res.json({
-success:false,
-message:"حساب شما مسدود شده است"
-});
-
-}
-
 const valid =
 await bcrypt.compare(
 password,
@@ -121,7 +109,7 @@ if(!valid){
 
 return res.json({
 success:false,
-message:"رمز عبور اشتباه است"
+message:"رمز اشتباه است"
 });
 
 }
@@ -130,8 +118,7 @@ const token =
 jwt.sign(
 {
 id:user.id,
-username:user.username,
-role:user.role
+username:user.username
 },
 process.env.JWT_SECRET,
 {
@@ -144,8 +131,7 @@ success:true,
 token,
 id:user.id,
 username:user.username,
-balance:user.balance,
-points:user.points
+balance:user.balance
 });
 
 }catch(err){
@@ -159,28 +145,22 @@ error:err.message
 
 });
 
-/* =====================
-رتبه بندی
-===================== */
+/* LEADERBOARD */
 
-app.get("/api/leaderboard",
-async(req,res)=>{
+app.get("/api/leaderboard", async(req,res)=>{
 
-const [users] =
+const [rows] =
 await db.query(
-"SELECT username, country, points FROM users ORDER BY points DESC LIMIT 100"
+"SELECT username,country,points FROM users ORDER BY points DESC"
 );
 
-res.json(users);
+res.json(rows);
 
 });
 
-/* =====================
-اخبار
-===================== */
+/* NEWS */
 
-app.get("/api/news",
-async(req,res)=>{
+app.get("/api/news", async(req,res)=>{
 
 const [rows] =
 await db.query(
@@ -190,9 +170,10 @@ await db.query(
 res.json(rows);
 
 });
-app.get("/api/wallet/:id", async(req,res)=>{
 
-try{
+/* WALLET */
+
+app.get("/api/wallet/:id", async(req,res)=>{
 
 const id = req.params.id;
 
@@ -202,26 +183,12 @@ await db.query(
 [id]
 );
 
-if(!rows.length){
-
-return res.json({
-success:false
-});
-
-}
-
 res.json(rows[0]);
 
-}catch(err){
-
-res.status(500).json({
-success:false,
-error:err.message
 });
 
-}
+/* TRANSFER */
 
-});
 app.post("/api/transfer", async(req,res)=>{
 
 try{
@@ -305,9 +272,10 @@ error:err.message
 }
 
 });
-app.get("/api/transactions/:userId", async(req,res)=>{
 
-try{
+/* TRANSACTIONS */
+
+app.get("/api/transactions/:userId", async(req,res)=>{
 
 const userId = req.params.userId;
 
@@ -319,19 +287,9 @@ await db.query(
 
 res.json(rows);
 
-}catch(err){
-
-res.status(500).json({
-success:false,
-error:err.message
 });
 
-}
-
-});
-/* =====================
-اجرای سرور
-===================== */
+/* SERVER */
 
 const PORT =
 process.env.PORT || 3000;
