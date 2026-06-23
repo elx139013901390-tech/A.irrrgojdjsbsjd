@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8">
+<title>ورود</title>
+<link rel="stylesheet" href="style.css">
+</head><body><div class="container"><div class="card"><h1>🔐 ورود</h1><input
+type="text"
+id="username"
+placeholder="نام کاربری">
+
+<input
+type="password"
+id="password"
+placeholder="رمز عبور">
+
+<br><br>
+
+<button
+class="btn"
+onclick="loginUser()">
+
+ورود
+
+</button></div></div><script>
+
+async function loginUser(){
+
+const username =
+document.getElementById("username").value;
+
+const password =
+document.getElementById("password").value;
+
+const res =
+await fetch("/api/login",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+username,
+password
+})
+});
+
+const data =
+await res.json();
+
+if(data.success){
+
+localStorage.setItem(
+"token",
+data.token
+);
+
+localStorage.setItem(
+"userId",
+data.id
+);
+
+localStorage.setItem(
+"username",
+data.username
+);
+
+alert("ورود موفق");
+
+location.href="index.html";
+
+}else{
+
+alert(data.message);
+
+}
+
+}
+
+</script></body>
+</html>
