@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8">
+<title>کیف پول</title>
+<link rel="stylesheet" href="style.css">
+</head><body><div class="container"><div class="card"><h1>
+💰 کیف پول من
+</h1><h2 id="balance">
+درحال بارگذاری...
+</h2></div></div><script>
+
+const userId =
+localStorage.getItem(
+"userId"
+);
+
+async function loadWallet(){
+
+const res =
+await fetch(
+"/api/wallet/"+userId
+);
+
+const data =
+await res.json();
+
+document.getElementById(
+"balance"
+).innerHTML =
+data.balance + " امتیاز";
+
+}
+
+loadWallet();
+
+</script></body>
+</html>
