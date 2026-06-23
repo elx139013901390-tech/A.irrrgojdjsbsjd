@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="UTF-8"><title>
+پنل مدیریت COP2026 GOLD
+</title><link rel="stylesheet"
+href="style.css"></head><body><div class="container"><div class="card"><h1>
+👑 پنل مدیریت COP2026 GOLD
+</h1><p>
+مدیر: امیر علی فروزان
+</p></div><div class="card"><h2>
+⚽ افزودن مسابقه
+</h2><input
+id="team1"
+placeholder="تیم اول">
+
+<input
+id="team2"
+placeholder="تیم دوم">
+
+<input
+id="matchDate"
+type="datetime-local">
+
+<br><br>
+
+<button
+class="btn"
+onclick="addMatch()">
+
+ثبت مسابقه
+
+</button></div><div class="card"><h2>
+📢 انتشار خبر
+</h2><input
+id="newsTitle"
+placeholder="عنوان خبر">
+
+<textarea
+id="newsContent"
+style="width:100%;height:120px;">
+</textarea><br><br>
+
+<button
+class="btn"
+onclick="addNews()">
+
+ثبت خبر
+
+</button></div><div class="card"><h2>
+🏆 مسابقات ثبت شده
+</h2><div id="matches">فعلاً خالی
+
+</div></div></div><script>
+
+if(
+localStorage.getItem("admin")
+!=="true"
+){
+location.href=
+"admin-login.html";
+}
+
+function addMatch(){
+
+alert(
+"در مرحله بعد به دیتابیس وصل می‌شود"
+);
+
+}
+
+function addNews(){
+
+alert(
+"در مرحله بعد به دیتابیس وصل می‌شود"
+);
+
+}
+
+</script></body>
+</html>
