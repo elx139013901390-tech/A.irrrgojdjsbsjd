@@ -305,6 +305,30 @@ error:err.message
 }
 
 });
+app.get("/api/transactions/:userId", async(req,res)=>{
+
+try{
+
+const userId = req.params.userId;
+
+const [rows] =
+await db.query(
+"SELECT * FROM wallet_transactions WHERE sender_id=? OR receiver_id=? ORDER BY id DESC",
+[userId,userId]
+);
+
+res.json(rows);
+
+}catch(err){
+
+res.status(500).json({
+success:false,
+error:err.message
+});
+
+}
+
+});
 /* =====================
 اجرای سرور
 ===================== */
