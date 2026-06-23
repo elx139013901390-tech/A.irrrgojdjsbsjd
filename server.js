@@ -222,6 +222,89 @@ error:err.message
 }
 
 });
+app.post("/api/transfer", async(req,res)=>{
+
+try{
+
+const {
+senderId,
+receiverUsername,
+amount
+} = req.body;
+
+const [sender] =
+await db.query(
+"SELECT * FROM users WHERE id=?",
+[senderId]
+);
+
+if(!sender.length){
+
+return res.json({
+success:false,
+message:"فرستنده پیدا نشد"
+});
+
+}
+
+if(sender[0].balance < amount){
+
+return res.json({
+success:false,
+message:"موجودی کافی نیست"
+});
+
+}
+
+const [receiver] =
+await db.query(
+"SELECT * FROM users WHERE username=?",
+[receiverUsername]
+);
+
+if(!receiver.length){
+
+return res.json({
+success:false,
+message:"کاربر مقصد پیدا نشد"
+});
+
+}
+
+await db.query(
+"UPDATE users SET balance=balance-? WHERE id=?",
+[amount,senderId]
+);
+
+await db.query(
+"UPDATE users SET balance=balance+? WHERE id=?",
+[amount,receiver[0].id]
+);
+
+await db.query(
+"INSERT INTO wallet_transactions (sender_id,receiver_id,amount) VALUES(?,?,?)",
+[
+senderId,
+receiver[0].id,
+amount
+]
+);
+
+res.json({
+success:true,
+message:"انتقال انجام شد"
+});
+
+}catch(err){
+
+res.status(500).json({
+success:false,
+error:err.message
+});
+
+}
+
+});
 /* =====================
 اجرای سرور
 ===================== */
