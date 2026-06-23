@@ -22,7 +22,9 @@ onclick="transfer()">
 
 انتقال امتیاز
 
-</button></div></div><script>
+</button></div><div class="card"><h2>📜 تاریخچه تراکنش‌ها</h2><div id="transactions">درحال بارگذاری...
+
+</div></div></div><script>
 
 const userId =
 localStorage.getItem("userId");
@@ -78,10 +80,43 @@ await res.json();
 alert(data.message);
 
 loadWallet();
+loadTransactions();
+
+}
+
+async function loadTransactions(){
+
+const res =
+await fetch(
+"/api/transactions/"+userId
+);
+
+const data =
+await res.json();
+
+const box =
+document.getElementById(
+"transactions"
+);
+
+box.innerHTML = "";
+
+data.forEach(item=>{
+
+box.innerHTML += `
+<div style="padding:10px;border-bottom:1px solid #444;">
+💸 مبلغ: ${item.amount}
+<br>
+🕒 ${item.created_at}
+</div>
+`;
+
+});
 
 }
 
 loadWallet();
+loadTransactions();
 
 </script></body>
 </html>
