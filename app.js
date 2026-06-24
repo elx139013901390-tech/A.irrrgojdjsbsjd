@@ -145,3 +145,52 @@ return;
 alert("✅ پیش‌بینی ثبت شد");
 
 }
+async function transferCoins(receiverUsername, amount){
+
+const currentUser =
+JSON.parse(localStorage.getItem("user"));
+
+const { data: receiver } =
+await supabase
+.from("users")
+.select("*")
+.eq("username", receiverUsername)
+.single();
+
+if(!receiver){
+alert("کاربر پیدا نشد");
+return;
+}
+
+if(currentUser.balance < amount){
+alert("موجودی کافی نیست");
+return;
+}
+
+await supabase
+.from("transactions")
+.insert([
+{
+sender_id: currentUser.id,
+receiver_id: receiver.id,
+amount: amount,
+description: "COP2026 BANK Transfer"
+}
+]);
+
+await supabase
+.from("users")
+.update({
+balance: currentUser.balance - amount
+})
+.eq("id", currentUser.id);
+
+await supabase
+.from("users")
+.update({
+balance: receiver.balance + amount
+})
+.eq("id", receiver.id);
+
+alert("✅ انتقال موفق");
+}
