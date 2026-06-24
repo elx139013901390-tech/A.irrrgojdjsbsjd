@@ -2,44 +2,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ثبت نام</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
-body{
-font-family:tahoma;
-background:#111827;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
+<title>ورود</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
+<body><h2>ورود</h2><input id="username" placeholder="نام کاربری">
+<br><br><input id="password" type="password" placeholder="رمز عبور">
+<br><br><button onclick="loginUser()">ورود</button>
 
-.card{
-background:#1f2937;
-padding:30px;
-border-radius:15px;
-width:350px;
-}
-
-input{
-width:100%;
-padding:12px;
-margin:8px 0;
-border:none;
-border-radius:8px;
-}
-
-button{
-width:100%;
-padding:12px;
-background:#2563eb;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-</style></head><body><div class="card"><h2>ثبت نام</h2><input id="username" placeholder="نام کاربری"><input id="password" type="password" placeholder="رمز عبور"><input id="country" placeholder="کشور"><input id="favorite_team" placeholder="تیم مورد علاقه"><button onclick="registerUser()">
-ثبت نام
-</button></div><script>
+<script>
 
 const { createClient } = supabase;
 
@@ -48,7 +16,7 @@ const db = createClient(
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2dHZ5YnBtcHVpZWRqaG14a2VzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMDE0NTYsImV4cCI6MjA5Nzg3NzQ1Nn0.bME9cKnKtjE2lcRScEzQjSuWI02IZpv374cH24EJtm8"
 );
 
-async function registerUser(){
+async function loginUser(){
 
 const username =
 document.getElementById("username").value;
@@ -56,34 +24,28 @@ document.getElementById("username").value;
 const password =
 document.getElementById("password").value;
 
-const country =
-document.getElementById("country").value;
-
-const favorite_team =
-document.getElementById("favorite_team").value;
-
-const { error } =
-await db
+const { data, error } = await db
 .from("users")
-.insert([
-{
-username,
-password,
-country,
-favorite_team
-}
-]);
+.select("*")
+.eq("username", username)
+.eq("password", password);
 
 if(error){
-
 alert(error.message);
 return;
-
 }
 
-alert("ثبت نام موفق");
+if(!data || data.length === 0){
+alert("نام کاربری یا رمز اشتباه است");
+return;
+}
 
-window.location.href="login.html";
+localStorage.setItem("userId", data[0].id);
+localStorage.setItem("username", data[0].username);
+
+alert("ورود موفق");
+
+window.location.href = "index.html";
 
 }
 
