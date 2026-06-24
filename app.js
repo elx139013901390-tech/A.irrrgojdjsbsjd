@@ -114,3 +114,34 @@ data.map((u,i)=>
 ).join("");
 
 }
+async function predict(matchId){
+
+const home =
+document.getElementById("h${matchId}").value;
+
+const away =
+document.getElementById("a${matchId}").value;
+
+const currentUser =
+JSON.parse(localStorage.getItem("user"));
+
+const { error } =
+await supabase
+.from("predictions")
+.insert([
+{
+user_id: currentUser.id,
+match_id: matchId,
+predicted_home: parseInt(home),
+predicted_away: parseInt(away)
+}
+]);
+
+if(error){
+alert(error.message);
+return;
+}
+
+alert("✅ پیش‌بینی ثبت شد");
+
+}
