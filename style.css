@@ -31,3 +31,51 @@ button{
     padding:10px 20px;
     border-radius:10px;
 }
+.dashboard{
+padding:20px;
+color:white;
+}
+
+.top-card{
+background:rgba(255,255,255,.08);
+padding:20px;
+border-radius:20px;
+backdrop-filter:blur(10px);
+margin-bottom:20px;
+}
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-bottom:20px;
+}
+
+.stat-card{
+background:rgba(255,215,0,.1);
+border:1px solid gold;
+padding:15px;
+border-radius:15px;
+text-align:center;
+}
+
+.match-card{
+background:#111827;
+padding:15px;
+border-radius:15px;
+margin-bottom:15px;
+}
+
+.match-card input{
+width:70px;
+margin:5px;
+padding:10px;
+}
+
+.match-card button{
+background:gold;
+color:black;
+border:none;
+padding:10px;
+border-radius:10px;
+}
