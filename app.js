@@ -1,71 +1,53 @@
-const { createClient } = supabase;
+const SUPABASE_URL = "https://jmjhfqkqcjzhuuojvkyu.supabase.co";
+const SUPABASE_KEY = "ANON_KEY_HERE";
 
-const db = createClient(
-"https://jmjhfqkqcjzhuuojvkyu.supabase.co",
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptamhmcWtxY2p6aHV1b2p2a3l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMDgzMDcsImV4cCI6MjA5Nzg4NDMwN30.opuxBE74VTBcvbyJ-7wQ7ybqZoAzRs5VqmLAlmCQeGg"
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
-async function registerUser(){
+async function loadMatches() {
+  const { data, error } = await supabase
+    .from("matches")
+    .select("*")
+    .order("match_time");
 
-const username =
-document.getElementById("username").value;
+  if (error) {
+    console.log(error);
+    return;
+  }
 
-const password =
-document.getElementById("password").value;
+  const container = document.getElementById("matches");
 
-const { error } = await db
-.from("users")
-.insert([
-{
-username,
-password
-}
-]);
+  container.innerHTML = "";
 
-if(error){
-alert(error.message);
-return;
-}
+  data.forEach(match => {
+    container.innerHTML += `
+      <div class="match-card">
+        <h3>${match.team1} VS ${match.team2}</h3>
+        <p>امتیاز مسابقه: ${match.points}</p>
 
-alert("ثبت نام موفق");
+        <input id="score1-${match.id}" type="number" placeholder="${match.team1}">
+        <input id="score2-${match.id}" type="number" placeholder="${match.team2}">
 
-}
-
-async function login(){
-
-const username =
-document.getElementById("username").value;
-
-const password =
-document.getElementById("password").value;
-
-const { data,error } =
-await db
-.from("users")
-.select("*")
-.eq("username",username)
-.eq("password",password);
-
-if(error){
-alert(error.message);
-return;
+        <button onclick="savePrediction(${match.id})">
+          ثبت پیش بینی
+        </button>
+      </div>
+    `;
+  });
 }
 
-if(!data.length){
-alert("نام کاربری یا رمز اشتباه است");
-return;
+async function savePrediction(matchId) {
+  const score1 =
+    document.getElementById(`score1-${matchId}`).value;
+
+  const score2 =
+    document.getElementById(`score2-${matchId}`).value;
+
+  alert(
+    `پیش بینی ثبت شد: ${score1} - ${score2}`
+  );
 }
 
-localStorage.setItem(
-"userId",
-data[0].id
-);
-
-localStorage.setItem(
-"username",
-data[0].username
-);
-
-alert("ورود موفق");
-
-}
+loadMatches();
