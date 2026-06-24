@@ -1,39 +1,33 @@
 body{
-margin:0;
-font-family:tahoma;
-background:#0b1020;
-color:white;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
+    background:#050505;
+    color:white;
+    font-family:tahoma;
+    padding:20px;
 }
 
-.card{
-width:350px;
-padding:30px;
-border-radius:20px;
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(15px);
-box-shadow:0 0 30px rgba(255,215,0,.3);
-text-align:center;
+h1{
+    text-align:center;
+    color:gold;
+}
+
+.match-card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:15px;
+    padding:15px;
+    margin:10px 0;
 }
 
 input{
-width:100%;
-padding:12px;
-margin:8px 0;
-border:none;
-border-radius:10px;
+    width:70px;
+    padding:10px;
+    margin:5px;
 }
 
 button{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:10px;
-background:gold;
-font-weight:bold;
-cursor:pointer;
+    background:gold;
+    color:black;
+    border:none;
+    padding:10px 20px;
+    border-radius:10px;
 }
