@@ -324,3 +324,4 @@ JSON.parse(savedUser)
 }
 
 };
+alert("APP JS LOADED");
