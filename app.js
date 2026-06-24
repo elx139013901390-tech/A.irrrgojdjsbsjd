@@ -51,3 +51,66 @@ async function savePrediction(matchId) {
 }
 
 loadMatches();
+function showDashboard(user){
+
+document.body.innerHTML = `
+
+<div class="dashboard"><div class="top-card">
+<h2>🏆 COP2026 GOLD</h2>
+<p>${user.username}</p>
+</div><div class="stats-grid"><div class="stat-card">
+<h3>امتیاز کل</h3>
+<p>${user.points || 0}</p>
+</div><div class="stat-card">
+<h3>رتبه جهانی</h3>
+<p>#1</p>
+</div><div class="stat-card">
+<h3>COP2026 BANK</h3>
+<p>${user.balance || 0} Coin</p>
+</div><div class="stat-card">
+<h3>پیش‌بینی صحیح</h3>
+<p>${user.correct_predictions || 0}</p>
+</div></div><div id="todayMatches"></div><div id="leaderboard"></div><button onclick="logout()">خروج</button>
+
+</div>`;
+
+loadMatches();
+loadLeaderboard();
+
+}
+
+async function loadMatches(){
+
+const { data } = await supabase
+.from("matches")
+.select("*");
+
+const container =
+document.getElementById("todayMatches");
+
+container.innerHTML = data.map(match => `
+
+<div class="match-card"><h3>${match.team1} VS ${match.team2}</h3><input type="number" id="h${match.id}" placeholder="گل میزبان"><input type="number" id="a${match.id}" placeholder="گل مهمان"><button onclick="predict(${match.id})">
+ثبت پیش‌بینی
+</button></div>`).join("");
+
+}
+
+async function loadLeaderboard(){
+
+const { data } = await supabase
+.from("users")
+.select("*")
+.order("points",{ascending:false})
+.limit(20);
+
+const board =
+document.getElementById("leaderboard");
+
+board.innerHTML =
+"<h2>🏅 لیدربورد جهانی</h2>" +
+data.map((u,i)=>
+"<p>${i+1}. ${u.username} - ${u.points}</p>"
+).join("");
+
+}
