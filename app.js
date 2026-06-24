@@ -1,3 +1,5 @@
+alert("APP STARTED");
+console.log("APP STARTED");
 const SUPABASE_URL =
 "https://mohqgbqgzuffbaazqyfg.supabase.co";
 
