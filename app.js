@@ -1,8 +1,8 @@
 const SUPABASE_URL =
-"https://aorhzgfyntfybfovocle.supabase.co";
+"https://mohqgbqgzuffbaazqyfg.supabase.co";
 
 const SUPABASE_KEY =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvcmh6Z2Z5bnRmeWJmb3ZvY2xlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMTc4NjgsImV4cCI6MjA5Nzg5Mzg2OH0.5SAW3uwc8rJFz-mzvbLzf5TFFr2cQU82yJN_t_LotOg";
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1vaHFnYnFnenVmZmJhYXpxeWZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMTM4MjEsImV4cCI6MjA5Nzg4OTgyMX0.jwvtramJ8ObtFLmqWRmd9m2jx__16395znhvBFFMlrs";
 
 const supabase =
 window.supabase.createClient(
@@ -12,12 +12,60 @@ SUPABASE_KEY
 
 async function registerUser(){
 
-alert("دکمه ثبت نام کار میکند");
+const username =
+document.getElementById("username").value;
 
+const password =
+document.getElementById("password").value;
+
+if(!username || !password){
+alert("نام کاربری و رمز عبور را وارد کنید");
+return;
+}
+
+const { error } =
+await supabase
+.from("users")
+.insert([
+{
+username: username,
+password: password
+}
+]);
+
+if(error){
+alert(error.message);
+return;
+}
+
+alert("✅ ثبت نام موفق");
 }
 
 async function login(){
 
-alert("دکمه ورود کار میکند");
+const username =
+document.getElementById("username").value;
 
+const password =
+document.getElementById("password").value;
+
+const { data,error } =
+await supabase
+.from("users")
+.select("*")
+.eq("username",username)
+.eq("password",password)
+.single();
+
+if(error || !data){
+alert("نام کاربری یا رمز عبور اشتباه است");
+return;
+}
+
+localStorage.setItem(
+"user",
+JSON.stringify(data)
+);
+
+alert("✅ ورود موفق");
 }
