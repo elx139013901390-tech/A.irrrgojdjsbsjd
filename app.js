@@ -66,3 +66,4 @@ async function login() {
 
   alert("✅ ورود موفق");
 }
+alert("APP OK");
